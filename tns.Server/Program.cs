@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using tns.Server.src.Modules.User;
 using tns.Server.src.Modules.User.Aplication.DTOs;
-using tns.Server.src.Shared.Authenticacion;
 using tns.Server.src.Shared.Authentication;
+using tns.Server.src.Shared.Authenticacion;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.IdentityModel.Tokens;
+using tns.Server.src.Modules.User;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,8 +42,6 @@ builder.Services.AddAuthentication(options =>
     };
 })
 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("Basic", null);
-
-
 
 var app = builder.Build();
 
