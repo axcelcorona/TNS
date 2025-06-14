@@ -31,5 +31,12 @@
             Email = email;
             UpdatedAt = DateTime.UtcNow;
         }
+
+        internal void UpdatePassword(string newPassword, string newSalt)
+        {
+            PasswordHash = newPassword;
+            Salt = newSalt;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }

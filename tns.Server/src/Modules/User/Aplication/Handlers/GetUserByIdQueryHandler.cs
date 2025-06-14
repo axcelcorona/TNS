@@ -6,10 +6,10 @@ using tns.Server.src.Modules.User.Domain.Repositories;
 
 namespace tns.Server.src.Modules.User.Aplication.Handlers
 {
-    public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, Result<UserDto>>
+    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Result<UserDto>>
     {
         private readonly IUserRepository _userRepository;
-        public GetUserByIdHandler(IUserRepository userRepository)
+        public GetUserByIdQueryHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

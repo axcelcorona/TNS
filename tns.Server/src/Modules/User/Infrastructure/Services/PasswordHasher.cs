@@ -24,7 +24,7 @@ namespace tns.Server.src.Modules.User.Infrastructure.Services
         public bool VerifyPassword(string password, string hash, string salt)
         {
             var newHash = HashPassword(password, salt);
-            return newHash == hash;
+            return newHash.Equals(hash);
         }
     }
 }

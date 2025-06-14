@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using tns.Server.src.Modules.User.Aplication.Commands;
 using tns.Server.src.Modules.User.Domain.Repositories;
 using tns.Server.src.Modules.User.Domain.Services;
 
-namespace tns.Server.src.Modules.User.Aplication.Commands
+namespace tns.Server.src.Modules.User.Aplication.Handlers
 {
     public class CreateUserCommnadHandler : IRequestHandler<CreateUserCommand, Result<Guid>>
     {
