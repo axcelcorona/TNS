@@ -1,4 +1,4 @@
-﻿namespace tns.Server.src.Modules.User.Aplication.Commands
+﻿namespace tns.Server.src.Shared.Mediator
 {
     public class Result<T>
     {
@@ -25,7 +25,6 @@
         public static Result<T> Unauthorized(string error) => new Result<T>(false, default, error); 
     }
 
-    // Versión no genérica para operaciones sin valor de retorno
     public class Result
     {
         public bool IsSuccess { get; }

@@ -1,11 +1,15 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using tns.Server.src.Modules.User.Aplication.DTOs;
-using tns.Server.src.Shared.Authentication;
-using tns.Server.src.Shared.Authenticacion;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.IdentityModel.Tokens;
-using tns.Server.src.Modules.User;
 using System.Text;
+using tns.Server.src.Modules.Notification;
+using tns.Server.src.Modules.Notification.Domain;
+using tns.Server.src.Modules.User;
+using tns.Server.src.Modules.User.Aplication.DTOs;
+using tns.Server.src.Shared.Authenticacion;
+using tns.Server.src.Shared.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,10 +21,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddUserModule(builder.Configuration);
+builder.Services.AddNotificationModule(builder.Configuration);
 
 // Configuración de JWT
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<BasicAuthConfig>(builder.Configuration.GetSection("BasicAuth"));
+builder.Services.Configure<SmtpConfiguration>(builder.Configuration.GetSection("SmtpConfiguration"));
+
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(SentWelcomEmailHandler).Assembly);
+});
 
 builder.Services.AddAuthentication(options =>
 {

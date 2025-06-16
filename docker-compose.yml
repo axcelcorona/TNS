@@ -32,5 +32,23 @@ services:
       timeout: 5s
       retries: 5
 
+  poste.io:
+    image: analogic/poste.io
+    container_name: mail
+    restart: always
+    hostname: mail.localhost
+    environment:
+      - TZ=America/Panama
+    volumes:
+      - poste_data:/data
+    ports:
+      - "25:25"
+      - "465:465"
+      - "587:587"
+      - "993:993"
+      - "8081:80"
+      - "8443:443"
+
 volumes:
   postgres_data:
+  poste_data:
