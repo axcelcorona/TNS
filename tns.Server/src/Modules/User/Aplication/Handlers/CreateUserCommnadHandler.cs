@@ -1,18 +1,23 @@
 ﻿using MediatR;
+using tns.Server.src.Modules.Notification.Aplication.Commands;
+using tns.Server.src.Modules.User.Aplication.Commands;
 using tns.Server.src.Modules.User.Domain.Repositories;
 using tns.Server.src.Modules.User.Domain.Services;
+using tns.Server.src.Shared.Mediator;
 
-namespace tns.Server.src.Modules.User.Aplication.Commands
+namespace tns.Server.src.Modules.User.Aplication.Handlers
 {
     public class CreateUserCommnadHandler : IRequestHandler<CreateUserCommand, Result<Guid>>
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IMediator _mediator;
 
-        public CreateUserCommnadHandler(IUserRepository userRepository, IPasswordHasher passwordHasher)
+        public CreateUserCommnadHandler(IUserRepository userRepository, IPasswordHasher passwordHasher, IMediator mediator)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
+            _mediator = mediator;
         }
 
         public async Task<Result<Guid>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -38,6 +43,13 @@ namespace tns.Server.src.Modules.User.Aplication.Commands
 
             // Save the user to the repository (assuming a method exists for this).
             await _userRepository.AddAsync(user);
+
+            var emailCommand = new SendWelcomEmailCommnad(
+                to: request.Email,
+                name: request.Name
+            );
+
+            await _mediator.Send(emailCommand, cancellationToken);
 
             return Result<Guid>.Success(user.Id);
         }

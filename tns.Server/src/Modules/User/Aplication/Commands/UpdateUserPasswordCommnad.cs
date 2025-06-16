@@ -3,5 +3,5 @@ using tns.Server.src.Shared.Mediator;
 
 namespace tns.Server.src.Modules.User.Aplication.Commands
 {
-    public record CreateUserCommand(string Name, string Email, string Password) : IRequest<Result<Guid>>;
+    public record UpdateUserPasswordCommnad(Guid id, string oldPassword, string newPassword): IRequest<Result<bool>>;
 }

@@ -1,13 +1,14 @@
 ﻿using MediatR;
 using tns.Server.src.Modules.User.Aplication.Commands;
 using tns.Server.src.Modules.User.Domain.Repositories;
+using tns.Server.src.Shared.Mediator;
 
 namespace tns.Server.src.Modules.User.Aplication.Handlers
 {
-    public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Result<Guid>>
+    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Result<Guid>>
     {
         private readonly IUserRepository _userRepository;
-        public UpdateUserHandler(IUserRepository userRepository)
+        public UpdateUserCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

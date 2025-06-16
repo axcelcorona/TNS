@@ -79,5 +79,13 @@ namespace tns.Server.src.Modules.User.Infrastructure.Controllers
             return result.IsSuccess ? NoContent() : BadRequest(result.Error);
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPut("update-password")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdateUserPasswordCommnad command)
+        {
+            var result = await _mediator.Send(command);
+            return result.IsSuccess ? NoContent() : BadRequest(result.Error);
+
+        }
     }
 }

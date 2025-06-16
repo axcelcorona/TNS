@@ -1,13 +1,14 @@
 ﻿using MediatR;
 using tns.Server.src.Modules.User.Aplication.Commands;
 using tns.Server.src.Modules.User.Domain.Repositories;
+using tns.Server.src.Shared.Mediator;
 
 namespace tns.Server.src.Modules.User.Aplication.Handlers
 {
-    public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, Result<Guid>>
+    public class DeleteUserCommnadHandler : IRequestHandler<DeleteUserCommand, Result<Guid>>
     {
         private readonly IUserRepository _userRepository;
-        public DeleteUserHandler(IUserRepository userRepository)
+        public DeleteUserCommnadHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
