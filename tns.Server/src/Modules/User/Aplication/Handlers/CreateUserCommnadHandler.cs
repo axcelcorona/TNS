@@ -12,12 +12,14 @@ namespace tns.Server.src.Modules.User.Aplication.Handlers
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IMediator _mediator;
+        private readonly ITokenService _tokenService;
 
-        public CreateUserCommnadHandler(IUserRepository userRepository, IPasswordHasher passwordHasher, IMediator mediator)
+        public CreateUserCommnadHandler(IUserRepository userRepository, IPasswordHasher passwordHasher, IMediator mediator, ITokenService tokenService)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
             _mediator = mediator;
+            _tokenService = tokenService;
         }
 
         public async Task<Result<Guid>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -38,18 +40,47 @@ namespace tns.Server.src.Modules.User.Aplication.Handlers
                 passwordHash: passwordHash,
                 salt: salt,
                 createdAt: DateTime.UtcNow,
+                IsEmailConfirmed: false,
                 updatedAt: null
             );
 
             // Save the user to the repository (assuming a method exists for this).
             await _userRepository.AddAsync(user);
 
-            var emailCommand = new SendWelcomEmailCommnad(
+            var welcomeEmailCommand = new SendWelcomEmailCommnad(
                 to: request.Email,
                 name: request.Name
             );
 
-            await _mediator.Send(emailCommand, cancellationToken);
+            var tokenConfirmation = _tokenService.GenerateTokenConfirmEmail(user);
+
+            var confirmEmail = new SendConfirmationEmailCommand(token: tokenConfirmation, email: user.Email);
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _mediator.Send(welcomeEmailCommand);
+                }
+                catch (Exception ex)
+                {
+                    // Aquí puedes loggear el error si usas un logger
+                    Console.WriteLine($"Error al enviar correo de bienvenida: {ex.Message}");
+                }
+            }, cancellationToken);
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _mediator.Send(confirmEmail);
+                }
+                catch (Exception ex)
+                {
+                    // Aquí puedes loggear el error si usas un logger
+                    Console.WriteLine($"Error al enviar correo de confirmacion: {ex.Message}");
+                }
+            }, cancellationToken);
 
             return Result<Guid>.Success(user.Id);
         }

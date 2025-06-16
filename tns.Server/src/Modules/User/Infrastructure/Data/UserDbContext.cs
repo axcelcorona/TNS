@@ -17,6 +17,7 @@ namespace tns.Server.src.Modules.User.Infrastructure.Data
                 entity.Property(u => u.Email).IsRequired().HasMaxLength(255);
                 entity.Property(u => u.PasswordHash).IsRequired().HasMaxLength(255);
                 entity.Property(u => u.Salt).IsRequired().HasMaxLength(255);
+                entity.Property(u => u.IsEmailConfirmed).IsRequired().HasDefaultValue(false);
                 entity.Property(u => u.CreatedAt).IsRequired();
                 entity.Property(u => u.UpdatedAt).HasColumnType("timestamp with time zone")
                                                  .HasConversion(

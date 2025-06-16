@@ -13,6 +13,12 @@ using tns.Server.src.Shared.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(80);  // asegúrate de que escuche en el puerto 80 dentro del contenedor
+    // options.ListenAnyIP(443, listenOptions => listenOptions.UseHttps()); // si necesitas HTTPS
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();

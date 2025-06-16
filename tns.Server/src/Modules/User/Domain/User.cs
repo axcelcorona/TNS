@@ -1,4 +1,6 @@
-﻿namespace tns.Server.src.Modules.User.Domain
+﻿using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions.Internal;
+
+namespace tns.Server.src.Modules.User.Domain
 {
     public class User
     {
@@ -7,6 +9,7 @@
         public string Email { get; private set; }
         public string PasswordHash { get; private set; }
         public string Salt { get; private set; }
+        public bool IsEmailConfirmed { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime? UpdatedAt { get; private set; }
         
@@ -14,7 +17,7 @@
         {
         }
 
-        public User(Guid id, string name, string email, string passwordHash, string salt, DateTime createdAt, DateTime? updatedAt)
+        public User(Guid id, string name, string email, string passwordHash, string salt, DateTime createdAt, DateTime? updatedAt, bool IsEmailConfirmed)
         {
             Id = id;
             Name = name;
@@ -23,6 +26,7 @@
             Salt = salt;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
+            IsEmailConfirmed = false;
         }
 
         public void Update(string name, string email)
@@ -38,5 +42,12 @@
             Salt = newSalt;
             UpdatedAt = DateTime.UtcNow;
         }
+
+        public void UpdateConfirmEmail()
+        {
+            IsEmailConfirmed = true;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
     }
 }

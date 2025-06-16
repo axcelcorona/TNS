@@ -1,9 +1,10 @@
-﻿using tns.Server.src.Modules.User.Aplication.Commands;
-using tns.Server.src.Modules.User.Aplication.Queries;
-using tns.Server.src.Shared.Authentication;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MediatR;
+using Microsoft.IdentityModel.Tokens;
+using tns.Server.src.Modules.User.Aplication.Commands;
+using tns.Server.src.Modules.User.Aplication.Queries;
+using tns.Server.src.Shared.Authentication;
 
 namespace tns.Server.src.Modules.User.Infrastructure.Controllers
 {
@@ -86,6 +87,18 @@ namespace tns.Server.src.Modules.User.Infrastructure.Controllers
             var result = await _mediator.Send(command);
             return result.IsSuccess ? NoContent() : BadRequest(result.Error);
 
+        }
+
+        [AllowAnonymous]
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> CorfirmationToEmail([FromQuery]ConfirmationEmailCommand command)
+        {
+            if(!string.IsNullOrEmpty(command.email)) BadRequest("This Email is required.");
+            if(!string.IsNullOrEmpty(command.token)) BadRequest("This Token is required.");
+
+            var result = await _mediator.Send(command);
+
+            return result.IsSuccess ? NoContent() : BadRequest(result.Error);
         }
     }
 }
